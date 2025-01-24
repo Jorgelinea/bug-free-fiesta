@@ -139,14 +139,17 @@ function UILibrary:CreateUI(titleText, descriptionText)
     uiData.TabsScroll = tabsScroll
     uiData.ContentScroll = contentScroll
     uiData.ContentFrame = contentFrame  -- Guardar referencia al contentFrame para minimizarlo
+    uiData.TabsFrame = tabsFrame  -- Guardar referencia al tabsFrame para minimizarlo
 
     minimizeButton.MouseButton1Click:Connect(function()
-        -- Minimizar solo el contenedor de contenido, no el titleFrame
+        -- Minimizar tanto el contenedor de contenido como el de los tabs
         if uiData.Minimized then
             contentFrame.Visible = true
+            tabsFrame.Visible = true
             uiData.Minimized = false
         else
             contentFrame.Visible = false
+            tabsFrame.Visible = false
             uiData.Minimized = true
         end
     end)
