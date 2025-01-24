@@ -1,11 +1,13 @@
 local UILibrary = {}
 
-function UILibrary:CreateUI(titleText)
+function UILibrary:CreateUI(titleText, descriptionText)
     -- Crear tabla para almacenar información del GUI
     local uiData = {
         Tabs = {},
         ScreenGui = nil,
-        TitleLabel = nil
+        TitleLabel = nil,
+        DescriptionLabel = nil,
+        Minimized = false
     }
 
     local Players = game:GetService("Players")
@@ -21,24 +23,40 @@ function UILibrary:CreateUI(titleText)
     -- Crear Frame para el Título General
     local titleFrame = Instance.new("Frame")
     titleFrame.Name = "TitleFrame"
-    titleFrame.Size = UDim2.new(1, 0, 0, 30)
+    titleFrame.Size = UDim2.new(1, 0, 0, 40)
     titleFrame.Position = UDim2.new(0, 0, 0, 0)
     titleFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     titleFrame.BorderSizePixel = 0
     titleFrame.Parent = screenGui
 
+    -- Título
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Name = "TitleLabel"
-    titleLabel.Size = UDim2.new(1, -40, 1, 0)
+    titleLabel.Size = UDim2.new(1, -80, 0.5, 0)
     titleLabel.Position = UDim2.new(0, 10, 0, 0)
     titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = titleText or "Default Title" -- Texto inicial del título
+    titleLabel.Text = titleText or "Default Title"
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.Font = Enum.Font.SourceSansBold
     titleLabel.TextSize = 20
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
     titleLabel.Parent = titleFrame
     uiData.TitleLabel = titleLabel
+
+    -- Descripción
+    local descriptionLabel = Instance.new("TextLabel")
+    descriptionLabel.Name = "DescriptionLabel"
+    descriptionLabel.Size = UDim2.new(1, -80, 0.5, 0)
+    descriptionLabel.Position = UDim2.new(0, 10, 0.5, 0)
+    descriptionLabel.BackgroundTransparency = 1
+    descriptionLabel.Text = descriptionText or "Default Description"
+    descriptionLabel.TextColor3 = Color3.fromRGB(150, 150, 150) -- Gris
+    descriptionLabel.Font = Enum.Font.SourceSans
+    descriptionLabel.TextSize = 16
+    descriptionLabel.TextXAlignment = Enum.TextXAlignment.Left
+    descriptionLabel.TextYAlignment = Enum.TextYAlignment.Top
+    descriptionLabel.Parent = titleFrame
+    uiData.DescriptionLabel = descriptionLabel
 
     -- Botón "X" para cerrar todo el GUI
     local closeButton = Instance.new("TextButton")
@@ -56,11 +74,33 @@ function UILibrary:CreateUI(titleText)
         screenGui:Destroy()
     end)
 
+    -- Botón de Minimizador
+    local minimizeButton = Instance.new("TextButton")
+    minimizeButton.Name = "MinimizeButton"
+    minimizeButton.Size = UDim2.new(0, 30, 1, 0)
+    minimizeButton.Position = UDim2.new(1, -60, 0, 0)
+    minimizeButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    minimizeButton.Text = "_"
+    minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    minimizeButton.Font = Enum.Font.SourceSansBold
+    minimizeButton.TextSize = 18
+    minimizeButton.Parent = titleFrame
+
+    minimizeButton.MouseButton1Click:Connect(function()
+        if uiData.Minimized then
+            screenGui.Parent = playerGui -- Restaurar la interfaz
+            uiData.Minimized = false
+        else
+            screenGui.Parent = nil -- Minimizar la interfaz
+            uiData.Minimized = true
+        end
+    end)
+
     -- Crear Frame para los Tabs
     local tabsFrame = Instance.new("Frame")
     tabsFrame.Name = "TabsFrame"
     tabsFrame.Size = UDim2.new(1, 0, 0, 50)
-    tabsFrame.Position = UDim2.new(0, 0, 0, 30)
+    tabsFrame.Position = UDim2.new(0, 0, 0, 40)
     tabsFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     tabsFrame.BorderSizePixel = 0
     tabsFrame.Parent = screenGui
