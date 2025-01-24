@@ -7,7 +7,8 @@ function UILibrary:CreateUI(titleText, descriptionText)
         ScreenGui = nil,
         TitleLabel = nil,
         DescriptionLabel = nil,
-        Minimized = false
+        Minimized = false,
+        ActiveTabButton = nil
     }
 
     local Players = game:GetService("Players")
@@ -175,6 +176,14 @@ function UILibrary:AddTab(uiData, tabName)
     uiData.Tabs[tabName] = tabContent
 
     tabButton.MouseButton1Click:Connect(function()
+        -- Cambiar color del Tab activo
+        if uiData.ActiveTabButton then
+            uiData.ActiveTabButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        end
+        tabButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)  -- Color para el Tab activo
+        uiData.ActiveTabButton = tabButton
+        
+        -- Mostrar el contenido del Tab seleccionado
         for _, tab in pairs(uiData.Tabs) do
             tab.Visible = false
         end
