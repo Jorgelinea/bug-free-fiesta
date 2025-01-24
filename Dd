@@ -23,7 +23,7 @@ function UILibrary:CreateUI(titleText, descriptionText)
     -- Crear Frame para el Título General
     local titleFrame = Instance.new("Frame")
     titleFrame.Name = "TitleFrame"
-    titleFrame.Size = UDim2.new(1, 0, 0, 40)
+    titleFrame.Size = UDim2.new(1, 0, 0, 50)  -- Un poco más alto para el título
     titleFrame.Position = UDim2.new(0, 0, 0, 0)
     titleFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     titleFrame.BorderSizePixel = 0
@@ -86,21 +86,11 @@ function UILibrary:CreateUI(titleText, descriptionText)
     minimizeButton.TextSize = 18
     minimizeButton.Parent = titleFrame
 
-    minimizeButton.MouseButton1Click:Connect(function()
-        if uiData.Minimized then
-            screenGui.Parent = playerGui -- Restaurar la interfaz
-            uiData.Minimized = false
-        else
-            screenGui.Parent = nil -- Minimizar la interfaz
-            uiData.Minimized = true
-        end
-    end)
-
     -- Crear Frame para los Tabs
     local tabsFrame = Instance.new("Frame")
     tabsFrame.Name = "TabsFrame"
-    tabsFrame.Size = UDim2.new(1, 0, 0, 50)
-    tabsFrame.Position = UDim2.new(0, 0, 0, 40)
+    tabsFrame.Size = UDim2.new(1, 0, 0, 50)  -- Un poco más separado
+    tabsFrame.Position = UDim2.new(0, 0, 0, 50)  -- Ajusta la posición para separarlo del titleFrame
     tabsFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     tabsFrame.BorderSizePixel = 0
     tabsFrame.Parent = screenGui
@@ -124,7 +114,7 @@ function UILibrary:CreateUI(titleText, descriptionText)
     local contentFrame = Instance.new("Frame")
     contentFrame.Name = "ContentFrame"
     contentFrame.Size = UDim2.new(1, 0, 0.9, -80)
-    contentFrame.Position = UDim2.new(0, 0, 0, 80)
+    contentFrame.Position = UDim2.new(0, 0, 0, 100) -- Separado aún más del titleFrame
     contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     contentFrame.BorderSizePixel = 0
     contentFrame.Parent = screenGui
@@ -147,6 +137,18 @@ function UILibrary:CreateUI(titleText, descriptionText)
     -- Guardar referencias
     uiData.TabsScroll = tabsScroll
     uiData.ContentScroll = contentScroll
+    uiData.ContentFrame = contentFrame  -- Guardar referencia al contentFrame para minimizarlo
+
+    minimizeButton.MouseButton1Click:Connect(function()
+        -- Minimizar solo el contenedor de contenido, no el titleFrame
+        if uiData.Minimized then
+            contentFrame.Visible = true
+            uiData.Minimized = false
+        else
+            contentFrame.Visible = false
+            uiData.Minimized = true
+        end
+    end)
 
     return uiData
 end
